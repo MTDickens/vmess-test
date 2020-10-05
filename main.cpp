@@ -5,7 +5,7 @@ using namespace std;
 #include <cstdlib>
 #include <cstring>
 
-// base64 ×ª»»±í, ¹²64¸ö
+// base64 è½¬æ¢è¡¨, å…±64ä¸ª
 static const char base64_alphabet[] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G',
     'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -18,7 +18,7 @@ static const char base64_alphabet[] = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     '+', '/'};
 
-// ½âÂëÊ±Ê¹ÓÃ
+// è§£ç æ—¶ä½¿ç”¨
 static const unsigned char base64_suffix_map[256] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 253, 255,
     255, 253, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -56,35 +56,35 @@ int base64_encode(const char *indata, int inlen, char *outdata, int *outlen) {
         return ret = -1;
     }
     
-    int in_len = 0; // Ô´×Ö·û´®³¤¶È, Èç¹ûin_len²»ÊÇ3µÄ±¶Êı, ÄÇÃ´ĞèÒª²¹³É3µÄ±¶Êı
-    int pad_num = 0; // ĞèÒª²¹ÆëµÄ×Ö·û¸öÊı, ÕâÑùÖ»ÓĞ2, 1, 0(0µÄ»°²»ĞèÒªÆ´½Ó, )
+    int in_len = 0; // æºå­—ç¬¦ä¸²é•¿åº¦, å¦‚æœin_lenä¸æ˜¯3çš„å€æ•°, é‚£ä¹ˆéœ€è¦è¡¥æˆ3çš„å€æ•°
+    int pad_num = 0; // éœ€è¦è¡¥é½çš„å­—ç¬¦ä¸ªæ•°, è¿™æ ·åªæœ‰2, 1, 0(0çš„è¯ä¸éœ€è¦æ‹¼æ¥, )
     if (inlen % 3 != 0) {
         pad_num = 3 - inlen % 3;
     }
-    in_len = inlen + pad_num; // Æ´½ÓºóµÄ³¤¶È, Êµ¼Ê±àÂëĞèÒªµÄ³¤¶È(3µÄ±¶Êı)
+    in_len = inlen + pad_num; // æ‹¼æ¥åçš„é•¿åº¦, å®é™…ç¼–ç éœ€è¦çš„é•¿åº¦(3çš„å€æ•°)
     
-    int out_len = in_len * 8 / 6; // ±àÂëºóµÄ³¤¶È
+    int out_len = in_len * 8 / 6; // ç¼–ç åçš„é•¿åº¦
     
-    char *p = outdata; // ¶¨ÒåÖ¸ÕëÖ¸Ïò´«³ödataµÄÊ×µØÖ·
+    char *p = outdata; // å®šä¹‰æŒ‡é’ˆæŒ‡å‘ä¼ å‡ºdataçš„é¦–åœ°å€
     
-    //±àÂë, ³¤¶ÈÎªµ÷ÕûºóµÄ³¤¶È, 3×Ö½ÚÒ»×é
+    //ç¼–ç , é•¿åº¦ä¸ºè°ƒæ•´åçš„é•¿åº¦, 3å­—èŠ‚ä¸€ç»„
     for (int i = 0; i < in_len; i+=3) {
-        int value = *indata >> 2; // ½«indataµÚÒ»¸ö×Ö·ûÏòÓÒÒÆ¶¯2bit(¶ªÆú2bit)
-        char c = base64_alphabet[value]; // ¶ÔÓ¦base64×ª»»±íµÄ×Ö·û
-        *p = c; // ½«¶ÔÓ¦×Ö·û(±àÂëºó×Ö·û)¸³Öµ¸øoutdataµÚÒ»×Ö½Ú
+        int value = *indata >> 2; // å°†indataç¬¬ä¸€ä¸ªå­—ç¬¦å‘å³ç§»åŠ¨2bit(ä¸¢å¼ƒ2bit)
+        char c = base64_alphabet[value]; // å¯¹åº”base64è½¬æ¢è¡¨çš„å­—ç¬¦
+        *p = c; // å°†å¯¹åº”å­—ç¬¦(ç¼–ç åå­—ç¬¦)èµ‹å€¼ç»™outdataç¬¬ä¸€å­—èŠ‚
         
-        //´¦Àí×îºóÒ»×é(×îºó3×Ö½Ú)µÄÊı¾İ
+        //å¤„ç†æœ€åä¸€ç»„(æœ€å3å­—èŠ‚)çš„æ•°æ®
         if (i == inlen + pad_num - 3 && pad_num != 0) {
             if(pad_num == 1) {
                 *(p + 1) = base64_alphabet[(int)(cmove_bits(*indata, 6, 2) + cmove_bits(*(indata + 1), 0, 4))];
                 *(p + 2) = base64_alphabet[(int)cmove_bits(*(indata + 1), 4, 2)];
                 *(p + 3) = '=';
-            } else if (pad_num == 2) { // ±àÂëºóµÄÊı¾İÒª²¹Á½¸ö '='
+            } else if (pad_num == 2) { // ç¼–ç åçš„æ•°æ®è¦è¡¥ä¸¤ä¸ª '='
                 *(p + 1) = base64_alphabet[(int)cmove_bits(*indata, 6, 2)];
                 *(p + 2) = '=';
                 *(p + 3) = '=';
             }
-        } else { // ´¦ÀíÕı³£µÄ3×Ö½ÚµÄÊı¾İ
+        } else { // å¤„ç†æ­£å¸¸çš„3å­—èŠ‚çš„æ•°æ®
             *(p + 1) = base64_alphabet[cmove_bits(*indata, 6, 2) + cmove_bits(*(indata + 1), 0, 4)];
             *(p + 2) = base64_alphabet[cmove_bits(*(indata + 1), 4, 2) + cmove_bits(*(indata + 2), 0, 6)];
             *(p + 3) = base64_alphabet[*(indata + 2) & 0x3f];
@@ -108,7 +108,7 @@ int base64_decode(const char *indata, int inlen, char *outdata, int *outlen) {
     if (indata == NULL || inlen <= 0 || outdata == NULL || outlen == NULL) {
         return ret = -1;
     }
-    if (inlen % 4 != 0) { // ĞèÒª½âÂëµÄÊı¾İ²»ÊÇ4×Ö½Ú±¶Êı
+    if (inlen % 4 != 0) { // éœ€è¦è§£ç çš„æ•°æ®ä¸æ˜¯4å­—èŠ‚å€æ•°
         return ret = -2;
     }
     
@@ -117,12 +117,12 @@ int base64_decode(const char *indata, int inlen, char *outdata, int *outlen) {
     int g = 3;
     
     while (indata[x] != 0) {
-        // ĞèÒª½âÂëµÄÊı¾İ¶ÔÓ¦µÄASCIIÖµ¶ÔÓ¦base64_suffix_mapµÄÖµ
+        // éœ€è¦è§£ç çš„æ•°æ®å¯¹åº”çš„ASCIIå€¼å¯¹åº”base64_suffix_mapçš„å€¼
         c = base64_suffix_map[indata[x++]];
-        if (c == 255) return -1;// ¶ÔÓ¦µÄÖµ²»ÔÚ×ªÂë±íÖĞ
-        if (c == 253) continue;// ¶ÔÓ¦µÄÖµÊÇ»»ĞĞ»òÕß»Ø³µ
-        if (c == 254) { c = 0; g--; }// ¶ÔÓ¦µÄÖµÊÇ'='
-        t = (t<<6) | c; // ½«ÆäÒÀ´Î·ÅÈëÒ»¸öintĞÍÖĞÕ¼3×Ö½Ú
+        if (c == 255) return -1;// å¯¹åº”çš„å€¼ä¸åœ¨è½¬ç è¡¨ä¸­
+        if (c == 253) continue;// å¯¹åº”çš„å€¼æ˜¯æ¢è¡Œæˆ–è€…å›è½¦
+        if (c == 254) { c = 0; g--; }// å¯¹åº”çš„å€¼æ˜¯'='
+        t = (t<<6) | c; // å°†å…¶ä¾æ¬¡æ”¾å…¥ä¸€ä¸ªintå‹ä¸­å 3å­—èŠ‚
         if (++y == 4) {
             outdata[i++] = (unsigned char)((t>>16)&0xff);
             if (g > 1) outdata[i++] = (unsigned char)((t>>8)&0xff);
