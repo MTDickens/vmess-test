@@ -144,7 +144,6 @@ int main()
 		string tmp = "{\"v\": \"2\",\"ps\": \"kinto tw\",\"add\": \"zj.cdn2020.pp.ua\",\"port\": \"";
 		tmp += to_string(num); 
 		tmp += "\",\"id\": \"df8b16b1-f7ad-403e-ba6a-70dd677bbd31\",\"aid\": \"0\",\"net\": \"ws\",\"type\": \"none\",\"host\": \"tw.mtdickens.workers.dev\",\"path\": \"/\",\"tls\": \"tls\"}";
-//		string tmp = "{\n\"v\": \"2\",\n\"ps\": \"kinto tw\",\n\"add\": \"zj.cdn2020.pp.ua\",\n\"port\": \"10081\",\n\"id\": \"df8b16b1-f7ad-403e-ba6a-70dd677bbd31\",\n\"aid\": \"0\",\n\"net\": \"ws\",\n\"type\": \"none\",\n\"host\": \"tw.mtdickens.workers.dev\",\n\"path\": \"/\",\n\"tls\": \"tls\"\n}";
 		char str[1000]={0};
 		int len=0;
 		base64_encode(tmp.c_str(),(int)strlen(tmp.c_str()),str,&len);
